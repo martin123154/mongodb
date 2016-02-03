@@ -11,14 +11,14 @@ import com.example.nosqldemo.domain.Przedstawienie;
 
 public interface PrzedstawienieRepository extends CrudRepository<Przedstawienie, ObjectId> {
 	
-	List<Przedstawienie> findBytytul(String tytul);
+	List<Przedstawienie> findAll();
 	
-
-	    List<Przedstawienie> findByRezyser(String rezyser);
+	List<Przedstawienie> findByTytul(String tytul);
+	
+	List<Przedstawienie> findByRezyser(String rezyser);
 	  
 	    @Query(value = "{ 'tytul' : ^?Tak}" )
-		List<Przedstawienie> znajdzPrzedstawienie(); 
+		List<Przedstawienie> znajdzTytul(String tytul); 
 	    
-	    Przedstawienie findById(ObjectId id);
 
 }

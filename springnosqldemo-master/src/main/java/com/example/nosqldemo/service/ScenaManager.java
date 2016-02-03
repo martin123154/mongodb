@@ -13,36 +13,42 @@ import com.example.nosqldemo.repository.PrzedstawienieRepository;
 import com.example.nosqldemo.repository.ScenaRepository;
 
 
+
+
+@Component
 public class ScenaManager {
 
 	@Autowired
-	private  ScenaRepository scenaRepository;
-	private  PrzedstawienieRepository przedstawienieRepository;
+	ScenaRepository scenaRepository;
+	PrzedstawienieRepository przedstawienieRepository;
 	
 	public void addScena(Scena scena){
 		scenaRepository.save(scena);
 	}
+	 public Scena findById(ObjectId id){
+	        return scenaRepository.findOne(id);
+	    }
 	public void deleteScena(Scena scena){
 		scenaRepository.delete(scena);
 	}
-	public void deletePrzedstawienie(Przedstawienie przedstawienie){
-		przedstawienieRepository.delete(przedstawienie);
-	}
-	public List<Scena> getSceny(String nazwa){
-		return scenaRepository.findByNazwa(nazwa);
-	}
-	
 
+    public List<Przedstawienie> findPrzedstawienieOnScena(Scena scena){
+        return scena.getPrzedstawienia();
+    }
+	
 	
 	public List<Scena> getSceny(){
 		return (List<Scena>) scenaRepository.findAll();
 	}
-	
-	
-
-	
-	public Scena getComputer(ObjectId id){
-		return scenaRepository.findById(id);
-	}
+    public void deletePrzedstawieniefromScena(Scena scena, String tytul) {
+        List<Przedstawienie> przedstawienieList = scena.getPrzedstawienia();
+        for (Przedstawienie p : przedstawienieList) {
+            if (p.getTytul() == tytul) {
+                scena.getPrzedstawienia().remove(p);
+                przedstawienieRepository.delete(p);
+            }
+            scenaRepository.save(scena);
+        }
+    }
 	
 }

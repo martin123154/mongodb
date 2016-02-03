@@ -8,11 +8,10 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.example.nosqldemo.domain.Scena;
 
+
 public interface ScenaRepository extends CrudRepository<Scena, ObjectId>{
 	
-	List<Scena> findByNazwa(String nazwa);
-	
-	Scena findById(ObjectId objectId);
+	 List<Scena> findAll();
 	
 
 }
