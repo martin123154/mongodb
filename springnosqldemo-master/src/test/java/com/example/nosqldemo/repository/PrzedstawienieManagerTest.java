@@ -1,6 +1,7 @@
 package com.example.nosqldemo.repository;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +51,7 @@ public class PrzedstawienieManagerTest {
     }
 
     @After
-    public void potestach() {
+    public void checkDelete() {
         List<Przedstawienie> przedstawienieList = przedstawienieManager.findAll();
 
         for (Przedstawienie p : przedstawienieList) {
@@ -65,6 +66,7 @@ public class PrzedstawienieManagerTest {
     	
     	 List<Przedstawienie> przedstawienieList = przedstawienieManager.findAll();
     	
+    	 
     	Przedstawienie przedstawienie = new Przedstawienie();
     	przedstawienie.setTytul(tytul1);
     	przedstawienie.setRezyser(rezyser1);
@@ -170,6 +172,31 @@ public class PrzedstawienieManagerTest {
         	    	 assertEquals(przedstawienieList.size(), przedstawienieList2.size()-1);
         	    	
     }
+        	    
+        	    @Test
+        	    public void findTytulRegex () {
+        	    	
+        	    	Przedstawienie przedstawienie = new Przedstawienie();
+        	    	przedstawienie.setTytul("Lew");
+        	    	przedstawienie.setRezyser(rezyser1);
+        	    	przedstawienie.setData_rozp(data_rozp1);
+        	    	przedstawienieManager.save(przedstawienie);
+        	    	
+        	    	Przedstawienie przedstawienie2 = new Przedstawienie();
+        	    	przedstawienie2.setTytul("Lew");
+        	    	przedstawienie2.setRezyser(rezyser2);
+        	    	przedstawienie2.setData_rozp(data_rozp2);
+        	    	przedstawienieManager.save(przedstawienie2);
+        	    	
+        	    	Przedstawienie przedstawienie3 = new Przedstawienie();
+        	    	przedstawienie3.setTytul(tytul2);
+        	    	przedstawienie3.setRezyser(rezyser3);
+        	    	przedstawienie3.setData_rozp(data_rozp3);
+        	    	przedstawienieManager.save(przedstawienie3);
+        	    	
+        	    	 List<Przedstawienie> wzorzec = przedstawienieManager.znajdzTytul("Lew");
+        	    	 assertTrue(wzorzec.size() == 2);
+        	    }
     
     
     

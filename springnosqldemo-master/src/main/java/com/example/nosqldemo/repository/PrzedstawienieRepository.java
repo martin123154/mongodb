@@ -17,7 +17,7 @@ public interface PrzedstawienieRepository extends CrudRepository<Przedstawienie,
 	
 	List<Przedstawienie> findByRezyser(String rezyser);
 	  
-	    @Query(value = "{ 'tytul' : ^?Tak}" )
+	    @Query(value = "{ tytul : {$regex: ?0 } }" )
 		List<Przedstawienie> znajdzTytul(String tytul); 
 	    
 
