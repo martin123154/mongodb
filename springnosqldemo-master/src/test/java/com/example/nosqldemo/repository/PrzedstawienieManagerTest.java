@@ -21,6 +21,7 @@ import com.example.nosqldemo.domain.Przedstawienie;
 
 
 
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/beans.xml" })
 public class PrzedstawienieManagerTest {
@@ -133,8 +134,41 @@ public class PrzedstawienieManagerTest {
              
              List<Przedstawienie> przedstawienieList2 = przedstawienieManager.findAll();
         	 assertEquals(przedstawienieList.size(), przedstawienieList2.size());
+    }
     	 
-        	 
+        	    @Test
+        	    public void checkFindPrzedstawienieByTytul () {
+        	   
+        	  
+        	    	Przedstawienie przedstawienie = new Przedstawienie();
+        	    	
+        	    	przedstawienie.setTytul(tytul1);
+        	    	przedstawienie.setRezyser(rezyser1);
+        	    	przedstawienie.setData_rozp(data_rozp1);
+        	    	przedstawienieManager.save(przedstawienie);
+        	    	
+
+        	    	Przedstawienie przedstawienie2 = new Przedstawienie();
+        	    	
+        	    	
+        	    	
+        	    	przedstawienie2.setTytul(tytul2);
+        	    	przedstawienie2.setRezyser(rezyser2);
+        	    	przedstawienie2.setData_rozp(data_rozp2);
+        	    	przedstawienieManager.save(przedstawienie2);
+        	    	
+        	    	List<Przedstawienie> przedstawienieList = przedstawienieManager.findByTytul(przedstawienie2.getTytul());
+
+        	    	Przedstawienie przedstawienie3 = new Przedstawienie();
+        	    	przedstawienie3.setTytul(tytul2);
+        	    	przedstawienie3.setRezyser(rezyser3);
+        	    	przedstawienie3.setData_rozp(data_rozp3);
+        	    	przedstawienieManager.save(przedstawienie3);
+        	
+        	    	 List<Przedstawienie> przedstawienieList2 = przedstawienieManager.findByTytul(przedstawienie2.getTytul());
+        	    	 
+        	    	 assertEquals(przedstawienieList.size(), przedstawienieList2.size()-1);
+        	    	
     }
     
     
