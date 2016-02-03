@@ -1,7 +1,6 @@
 package com.example.nosqldemo.repository;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -114,6 +113,58 @@ public class ScenaManagerTest {
 	         assertEquals(scena.getWielkosc(), scena1.getWielkosc());
 	         assertEquals(scenaManager.findPrzedstawienieOnScena(scena1).size(),2);
 	    	}
+	    
+	    @Test
+	    public void deletePrzedstawieniefromScena () {
+	    	   List<Przedstawienie> przedstawienieList5 = przedstawienieManager.findAll();
+	    	Scena scena = new Scena();
+	    	scena.setNazwa(nazwa1);
+	    	scena.setWielkosc(wielkosc1);
+	    	
+	    	Przedstawienie przedstawienie = new Przedstawienie();
+	    	przedstawienie.setTytul(tytul1);
+	    	przedstawienie.setRezyser(rezyser1);
+	    	przedstawienie.setData_rozp(data_rozp1);
+	    	przedstawienieManager.save(przedstawienie);
+	    	
+	    	Przedstawienie przedstawienie1 = new Przedstawienie();
+	    	przedstawienie1.setTytul(tytul2);
+	    	przedstawienie1.setRezyser(rezyser2);
+	    	przedstawienie1.setData_rozp(data_rozp2);
+	    	przedstawienieManager.save(przedstawienie1);
+	    	
+	    	Przedstawienie przedstawienie2 = new Przedstawienie();
+	    	przedstawienie2.setTytul(tytul2);
+	    	przedstawienie2.setRezyser(rezyser3);
+	    	przedstawienie2.setData_rozp(data_rozp3);
+	    	przedstawienieManager.save(przedstawienie2);
+	    	
+	    	   List<Przedstawienie> przedstawienieList6 = przedstawienieManager.findAll();
+	    	   assertEquals(przedstawienieList6.size()-3, przedstawienieList5.size());
+	    	
+	    	 List<Przedstawienie> przedstawienieList = new ArrayList<Przedstawienie>();
+	    	 
+	    	 przedstawienieList.add(przedstawienie);
+	    	 przedstawienieList.add(przedstawienie1);
+	    	 przedstawienieList.add(przedstawienie2);
+	    	 scena.setPrzedstawienia(przedstawienieList);
+	    	 
+	    	 scenaManager.addScena(scena);
+	    	 
+	     scenaManager.deletePrzedstawieniefromScenaByTytul(scena, tytul2);
+	    	 
+	    	 List<Przedstawienie> przedstawienieList1 = scenaManager.findPrzedstawienieOnScena(scena);
+	    	 
+	   	 Przedstawienie prz = przedstawienieManager.findOne(przedstawienie.getId());
+	         Przedstawienie prz1 = przedstawienieManager.findOne(przedstawienie1.getId());
+	         Przedstawienie prz2 = przedstawienieManager.findOne(przedstawienie2.getId());
+
+
+	        assertNotNull(prz);
+	        assertNull(prz1);
+	         assertNull(prz2);
+	         assertEquals(przedstawienieList1.size(),1);
+	    }
 	    }
 	    
 	    

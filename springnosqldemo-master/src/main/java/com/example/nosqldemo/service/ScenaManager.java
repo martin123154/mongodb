@@ -20,6 +20,7 @@ public class ScenaManager {
 
 	@Autowired
 	ScenaRepository scenaRepository;
+	@Autowired
 	PrzedstawienieRepository przedstawienieRepository;
 	
 	public void addScena(Scena scena){
@@ -40,14 +41,18 @@ public class ScenaManager {
 	public List<Scena> getSceny(){
 		return (List<Scena>) scenaRepository.findAll();
 	}
-    public void deletePrzedstawieniefromScena(Scena scena, String tytul) {
-        List<Przedstawienie> przedstawienieList = scena.getPrzedstawienia();
-        for (Przedstawienie p : przedstawienieList) {
-            if (p.getTytul() == tytul) {
-                scena.getPrzedstawienia().remove(p);
-                przedstawienieRepository.delete(p);
+	
+	
+    public void deletePrzedstawieniefromScenaByTytul(Scena scena, String tytul) {
+        List<Przedstawienie> przedstawienieList = findPrzedstawienieOnScena(scena);
+        for (int i = 0; i < przedstawienieList.size(); i++) {
+            if (przedstawienieList.get(i).getTytul() == tytul) {
+                ObjectId id = scena.getPrzedstawienia().get(i).getId();
+                scena.getPrzedstawienia().remove(i);
+                przedstawienieRepository.delete(id);
+                scenaRepository.save(scena);
+                i--;
             }
-            scenaRepository.save(scena);
         }
     }
 	
