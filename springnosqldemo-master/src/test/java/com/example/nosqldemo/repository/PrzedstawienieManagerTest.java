@@ -20,6 +20,7 @@ import com.example.nosqldemo.domain.Przedstawienie;
 
 
 
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/beans.xml" })
 public class PrzedstawienieManagerTest {
@@ -87,4 +88,55 @@ public class PrzedstawienieManagerTest {
 	    
    	 assertEquals(przedstawienieList2.size(), przedstawienieList.size()+2);
 }
+    @Test
+    public void checkDeletePrzedstawienie () {
+    
+    	 List<Przedstawienie> przedstawienieList = przedstawienieManager.findAll();
+    	 
+    	Przedstawienie przedstawienie = new Przedstawienie();
+    	przedstawienie.setTytul(tytul3);
+    	przedstawienie.setRezyser(rezyser3);
+    	przedstawienie.setData_rozp(data_rozp3);
+    	przedstawienieManager.save(przedstawienie);
+    	
+    	 List<Przedstawienie> przedstawienieList1 = przedstawienieManager.findAll();
+    	 assertEquals(przedstawienieList.size()+1, przedstawienieList1.size());
+    	 
+    	 przedstawienieManager.delete(przedstawienie);
+    	 List<Przedstawienie> przedstawienieList2 = przedstawienieManager.findAll();
+    	 assertEquals(przedstawienieList.size(), przedstawienieList2.size());
+    	
+    	
+    }
+    
+    @Test
+    public void checkEditPrzedstawienie () {
+    	
+   
+   	 
+    	Przedstawienie przedstawienie = new Przedstawienie();
+    	przedstawienie.setTytul(tytul1);
+    	przedstawienie.setRezyser(rezyser1);
+    	przedstawienie.setData_rozp(data_rozp1);
+    	przedstawienieManager.save(przedstawienie);
+    	
+    	 List<Przedstawienie> przedstawienieList = przedstawienieManager.findAll();
+    	   	przedstawienie.setTytul(tytul3);
+        	przedstawienie.setRezyser(rezyser3);
+        	przedstawienie.setData_rozp(data_rozp3);
+        	przedstawienieManager.save(przedstawienie);
+
+        	 Przedstawienie edytowanePrzedstawienie = przedstawienieManager.findOne(przedstawienie.getId());
+        	 assertEquals(edytowanePrzedstawienie.getTytul(), tytul3);
+             assertEquals(edytowanePrzedstawienie.getRezyser(), rezyser3);
+             assertEquals(edytowanePrzedstawienie.getData_rozp(), data_rozp3);
+             
+             List<Przedstawienie> przedstawienieList2 = przedstawienieManager.findAll();
+        	 assertEquals(przedstawienieList.size(), przedstawienieList2.size());
+    	 
+        	 
+    }
+    
+    
+    
 }
