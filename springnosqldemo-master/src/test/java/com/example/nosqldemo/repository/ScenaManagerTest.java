@@ -16,7 +16,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.example.nosqldemo.domain.Przedstawienie;
 import com.example.nosqldemo.domain.Scena;
-import com.example.nosqldemo.service.PrzedstawienieManager;
 import com.example.nosqldemo.service.ScenaManager;
 
 
@@ -28,6 +27,8 @@ public class ScenaManagerTest {
 	
 	@Autowired
 	ScenaManager scenaManager;
+	@Autowired
+	ScenaRepository scenaM;
 	@Autowired
 	PrzedstawienieRepository przedstawienieManager;
 	
@@ -49,7 +50,37 @@ public class ScenaManagerTest {
 	    private final String rezyser3 = "Linda";
 	    private final String data_rozp3 = "11-10-2015";
 	
-   
+	    private final List<ObjectId> wszystkieSceny = new ArrayList<ObjectId>();
+	       
+	    	    private final List<ObjectId> wszystkiePrzedstawienia = new ArrayList<ObjectId>();
+	    	    
+	    	    @Before
+	    	    public void checkAdding(){
+	    	        List<Scena> scenaList = scenaManager.getSceny();
+	    	        List<Przedstawienie> przedstawienieList = przedstawienieManager.findAll();
+	    	        for(Scena s : scenaList) {
+	    	            wszystkieSceny.add(s.getId());
+	    	        }
+	    	        for(Przedstawienie p : przedstawienieList) {
+	    	        	wszystkiePrzedstawienia.add(p.getId());
+	    	        }
+	    	    }
+	    	    
+	    	    @After
+	    	    public void checkDelete () {
+	    	    	List<Scena> scenaList = scenaManager.getSceny();
+	    	        List<Przedstawienie> przedstawienieList = przedstawienieManager.findAll();
+	    	        for(Scena s : scenaList) {
+	    	            if(!wszystkieSceny.contains(s.getId())) {
+	    	                scenaManager.deleteScena(s);
+	    	            }
+	    	        }
+	    	        for(Przedstawienie p : przedstawienieList) {
+	    	            if(!wszystkiePrzedstawienia.contains(p.getId())) {
+	    	                przedstawienieManager.delete(p);
+	    	            }
+	    	        }
+	    	    }
 	    
 	    @Test
 	    public void checkAddScena(){
@@ -127,17 +158,30 @@ public class ScenaManagerTest {
 	    	 scenaManager.deletePrzedstawieniefromScenaByTytul(scena, tytul2);
 	    	 
 	    	 List<Przedstawienie> przedstawienieList1 = scenaManager.findPrzedstawienieOnScena(scena);
-	    	 
-	    	 Przedstawienie nieusuniety = przedstawienieManager.findOne(przedstawienie.getId());
-	         Przedstawienie usuniety = przedstawienieManager.findOne(przedstawienie1.getId());
-	         Przedstawienie usuniety1 = przedstawienieManager.findOne(przedstawienie2.getId());
 
-
-	         assertNotNull(nieusuniety);
-	         assertNull(usuniety);
-	         assertNull(usuniety1);
 	         assertEquals(przedstawienieList1.size(),1);
 	    }
+	 //  @Test
+	    public void checkFindScenaByNazwa () {
+	    	
+	    	Scena scena = new Scena();
+	    	scena.setNazwa(nazwa1);
+	    	scena.setWielkosc(wielkosc1);
+	    	scenaManager.addScena(scena);
+	    	List<Scena> scenaList = scenaM.findByNazwa(scena.getNazwa());
+	    	Scena scena1 = new Scena();
+	    	scena.setNazwa(nazwa1);
+	    	scena.setWielkosc(wielkosc2);
+	    	scenaManager.addScena(scena1);
+	    	
+	    	List<Scena> scenaList1 = scenaM.findByNazwa(scena.getNazwa());
+	    	
+	        assertEquals(scenaList1.size()-1,scenaList.size());
+	    	
+	    	
+	    }
+	   
+	    	
 	    }
 	    
 	    

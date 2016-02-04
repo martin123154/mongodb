@@ -42,7 +42,29 @@ public class PrzedstawienieManagerTest {
     
 
     
+    private final List<ObjectId> wszystkiePrzedstawienia = new ArrayList<ObjectId>();
+    
+    @Before
+    public void checkAdding() {
+       List<Przedstawienie> przedstawienieList = przedstawienieManager.findAll();
+       for(Przedstawienie p : przedstawienieList) {
+        	wszystkiePrzedstawienia.add(p.getId());
+        }
+    }
  
+ 
+    @After
+    
+    public void checkDelete() {
+ 
+        List<Przedstawienie> przedstawienieList = przedstawienieManager.findAll();
+
+        for (Przedstawienie p : przedstawienieList) {
+           if (!wszystkiePrzedstawienia.contains(p.getId())) {
+           	przedstawienieManager.delete(p);
+            }
+        }
+   }
     
     @Test
     public void checkAddPrzedstawienie() {
@@ -56,6 +78,7 @@ public class PrzedstawienieManagerTest {
     	przedstawienie.setData_rozp(data_rozp1);
     	przedstawienieManager.save(przedstawienie);
    	    List<Przedstawienie> przedstawienieList1 = przedstawienieManager.findAll();
+   	 assertEquals(przedstawienieList1.size(), przedstawienieList.size()+1);
    	 
    	 Przedstawienie dodanePrzedstawienie = przedstawienieManager.findOne(przedstawienie.getId());
    	 
@@ -63,7 +86,7 @@ public class PrzedstawienieManagerTest {
    	 assertEquals(przedstawienie.getRezyser(), dodanePrzedstawienie.getRezyser());
      assertEquals(przedstawienie.getData_rozp(), dodanePrzedstawienie.getData_rozp());
      
-     assertEquals(przedstawienieList1.size(), przedstawienieList.size()+1);
+  
      
      Przedstawienie przedstawienie2 = new Przedstawienie();
  	przedstawienie2.setTytul(tytul2);
@@ -159,7 +182,7 @@ public class PrzedstawienieManagerTest {
         	    @Test
         	    public void findTytulRegex () {
         	    	
-        	    	List<Przedstawienie> wzorzec = przedstawienieManager.znajdzTytul("Kosakowo");
+        	    	List<Przedstawienie> wzorzec = przedstawienieManager.znajdzTytul("akowo");
         	    	
         	    	Przedstawienie przedstawienie = new Przedstawienie();
         	    	przedstawienie.setTytul("Kosakowo");
@@ -179,10 +202,11 @@ public class PrzedstawienieManagerTest {
         	    	przedstawienie3.setData_rozp(data_rozp3);
         	    	przedstawienieManager.save(przedstawienie3);
         	    	
-        	    	 List<Przedstawienie> wzorzec2 = przedstawienieManager.znajdzTytul("Kosakowo");
+        	    	 List<Przedstawienie> wzorzec2 = przedstawienieManager.znajdzTytul("akowo");
         	    	 assertEquals(wzorzec.size(), wzorzec2.size()-2);
         	    }
     
+        	    
     
     
 }
