@@ -49,36 +49,7 @@ public class ScenaManagerTest {
 	    private final String rezyser3 = "Linda";
 	    private final String data_rozp3 = "11-10-2015";
 	
-	    private final List<ObjectId> wszystkieSceny = new ArrayList<ObjectId>();
-	    private final List<ObjectId> wszystkiePrzedstawienia = new ArrayList<ObjectId>();
-	    
-	    @Before
-	    public void checkAdding(){
-	        List<Scena> scenaList = scenaManager.getSceny();
-	        List<Przedstawienie> przedstawienieList = przedstawienieManager.findAll();
-	        for(Scena s : scenaList) {
-	            wszystkieSceny.add(s.getId());
-	        }
-	        for(Przedstawienie p : przedstawienieList) {
-	        	wszystkiePrzedstawienia.add(p.getId());
-	        }
-	    }
-	    
-	    @After
-	    public void checkDelete () {
-	    	List<Scena> scenaList = scenaManager.getSceny();
-	        List<Przedstawienie> przedstawienieList = przedstawienieManager.findAll();
-	        for(Scena s : scenaList) {
-	            if(!wszystkieSceny.contains(s.getId())) {
-	                scenaManager.deleteScena(s);
-	            }
-	        }
-	        for(Przedstawienie p : przedstawienieList) {
-	            if(!wszystkiePrzedstawienia.contains(p.getId())) {
-	                przedstawienieManager.delete(p);
-	            }
-	        }
-	    }
+   
 	    
 	    @Test
 	    public void checkAddScena(){
@@ -106,9 +77,10 @@ public class ScenaManagerTest {
 	    	 List<Scena> scenaList = scenaManager.getSceny();
 	         scenaManager.addScena(scena);
 	         List<Scena> scenaList1 = scenaManager.getSceny();
+	         assertEquals(scenaList1.size(), scenaList.size()+1);
+	         
 	         Scena scena1 = scenaManager.findById(scena.getId());
 	         
-	         assertEquals(scenaList1.size(), scenaList.size()+1);
 	         assertEquals(scena.getNazwa(), scena1.getNazwa());
 	         assertEquals(scena.getWielkosc(), scena1.getWielkosc());
 	         assertEquals(scenaManager.findPrzedstawienieOnScena(scena1).size(),2);
@@ -150,19 +122,20 @@ public class ScenaManagerTest {
 	    	 scena.setPrzedstawienia(przedstawienieList);
 	    	 
 	    	 scenaManager.addScena(scena);
-	    	 
-	     scenaManager.deletePrzedstawieniefromScenaByTytul(scena, tytul2);
+	    	 List<Przedstawienie> przedstawienieList2 = scenaManager.findPrzedstawienieOnScena(scena);
+	    	 assertEquals(przedstawienieList2.size(),3);
+	    	 scenaManager.deletePrzedstawieniefromScenaByTytul(scena, tytul2);
 	    	 
 	    	 List<Przedstawienie> przedstawienieList1 = scenaManager.findPrzedstawienieOnScena(scena);
 	    	 
-	   	 Przedstawienie prz = przedstawienieManager.findOne(przedstawienie.getId());
-	         Przedstawienie prz1 = przedstawienieManager.findOne(przedstawienie1.getId());
-	         Przedstawienie prz2 = przedstawienieManager.findOne(przedstawienie2.getId());
+	    	 Przedstawienie nieusuniety = przedstawienieManager.findOne(przedstawienie.getId());
+	         Przedstawienie usuniety = przedstawienieManager.findOne(przedstawienie1.getId());
+	         Przedstawienie usuniety1 = przedstawienieManager.findOne(przedstawienie2.getId());
 
 
-	        assertNotNull(prz);
-	        assertNull(prz1);
-	         assertNull(prz2);
+	         assertNotNull(nieusuniety);
+	         assertNull(usuniety);
+	         assertNull(usuniety1);
 	         assertEquals(przedstawienieList1.size(),1);
 	    }
 	    }
